@@ -1,8 +1,7 @@
 import arweave from './arweaveSetup';
 import {currentUnixTime, getAppName} from './utils';
 
-export const getWalletAddress = async wallet =>
-    arweave.wallets.jwkToAddress(wallet);
+export const getWalletAddress = async wallet => arweave.wallets.jwkToAddress(wallet);
 
 export const getAllPortfolioTransactions = async walletAddress => {
     const query = {
@@ -20,56 +19,33 @@ export const getAllPortfolioTransactions = async walletAddress => {
     };
 
     const txids = await arweave.arql(query);
+    const transactions = await Promise.all(txids.map(txid => arweave.transactions.get(txid)));
 
-    const transactions = await Promise.all(
-        txids.map(txid => arweave.transactions.get(txid))
+    /*const files = await Promise.all(
+        transactions.map(transaction => transaction.get('data', {decode: true}))
     );
+    transactions.forEach(transaction => transaction.get('tags').forEach(tag => {
+        let key = tag.get('name', {decode: true, string: true});
+        let value = tag.get('value', {decode: true, string: true});
+        console.log(`${key} : ${value}`);
+    }));
 
-    const stringifiedTransactions = await Promise.all(
-        transactions.map(transaction =>
-            transaction.get('data', {decode: true, string: true})
-        )
-    );
 
-    /*return stringifiedTransactions
-        .map(transaction => JSON.parse(transaction))
-        .map(({coinName, amount, transactionType, time}) => ({
-            CoinName: coinName,
-            Amount: amount,
-            TransactionType: transactionType,
-            Time: time
-        }));*/
-    console.log(stringifiedTransactions);
-    return stringifiedTransactions;
+    console.log(files);
+    return files;*/
+    console.log(transactions);
+    return transactions;
 };
 
 export const addTransaction = async (transactionData, wallet) => {
-    Object.assign(transactionData, {time: currentUnixTime()});
-
-    const transaction = await arweave.createTransaction(
-        {data: JSON.stringify(transactionData)},
-        wallet
-    );
-
-    transaction.addTag('Coin-Name', transactionData.coinName);
-    transaction.addTag('Amount', transactionData.amount);
-    transaction.addTag('Transaction-Type', transactionData.TransactionType);
-    transaction.addTag('Time', transactionData.time);
-    transaction.addTag('App-Name', getAppName());
-
-    await arweave.transactions.sign(transaction, wallet);
-    await arweave.transactions.post(transaction);
-    return;
+    return false;
 };
 
-
-export const uploadPhoto = async (photo, wallet) => {
-    const transaction = await arweave.createTransaction(
-        {data: photo},
-        wallet
-    );
-
+export const uploadFile = async (content, name, size, wallet) => {
+    const transaction = await arweave.createTransaction({data: content}, wallet);
     transaction.addTag('App-Name', getAppName());
+    transaction.addTag('name', name);
+    transaction.addTag('size', size);
 
     await arweave.transactions.sign(transaction, wallet);
     await arweave.transactions.post(transaction);

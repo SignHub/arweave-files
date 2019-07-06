@@ -1,1 +1,1 @@
-export const APP_NAME = 'photoalbum-arweave';
+export const APP_NAME = 'files-arweave';

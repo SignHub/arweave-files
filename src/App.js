@@ -19,7 +19,7 @@ const App = () => {
         <Layout className="layout">
             <Header>
                 <Title style={{color: '#fff', padding: '15px'}} level={3}>
-                    Arweave Photoalbum
+                    Arweave Files
                 </Title>
             </Header>
             <Content style={{padding: '25px 50px'}}>

@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useEffect} from 'react';
 import {Upload, Icon, message} from 'antd';
 
 const {Dragger} = Upload;
@@ -35,6 +35,21 @@ const KeyUpload = ({setWallet}) => {
         }, 0);
     };
 
+    const loadWallet = (isForce = false) => {
+        const data = localStorage.getItem('wallet');
+        if (data) {
+            setWallet(JSON.parse(data));
+        } else {
+            if (!isForce) {
+                alert('Storage is empty. Please, use file selector');
+            }
+        }
+    };
+
+    useEffect(() => {
+        loadWallet(true);
+    });
+
     return (
         <Fragment>
             <Dragger
@@ -50,15 +65,7 @@ const KeyUpload = ({setWallet}) => {
                 <p className="ant-upload-text">Drop a wallet keyfile to login</p>
 
             </Dragger>
-            <p className="ant-upload-text" onClick={_ => {
-                const data = localStorage.getItem('wallet');
-                if (data) {
-                    setWallet(JSON.parse(data));
-                } else {
-                    alert('Storage is empty. Please, use file selector');
-                }
-
-            }}>Load from localstorage</p>
+            <p className="ant-upload-text" onClick={_ => loadWallet(false)}>Load from localstorage</p>
         </Fragment>
     );
 };
