@@ -1,8 +1,8 @@
-# photoalbum-arweave
+# Arweave files
 
-Simple photoalbum for Arweave. User can upload photos with wallet.
+Simple file storage for Arweave. User can upload files with wallet.
 
-Deployed at: https://arweave.net/bnb-GepCJlJJmbpIgRJhaMejDzztHOb511YFbeIQ4Z4
+Deployed at: https://arweave.net/Ak6ful97QUlskhl0sdkrV8ReQu2BUo4otmrfiWvvdao
 
 
 
